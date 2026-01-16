@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>明理建言直通车</title>
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #dbeafe;
+  --secondary: #64748b;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --text-lighter: #94a3b8;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  --success: #10b981;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: #FED8B1;
+  min-height: 100vh;
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wrapper {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  border: 1px solid rgba(241, 245, 249, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(241, 245, 249, 0.4);
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.header p {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-top: 8px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.form-group label .optional {
+  font-weight: 400;
+  color: var(--text-lighter);
+  font-size: 13px;
+  margin-left: 4px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
+  color: var(--text);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-group textarea {
+  min-height: 160px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.file-row {
+  margin-top: 24px;
+}
+
+.file-upload-wrapper {
+  position: relative;
+}
+
+.file-upload-wrapper input[type="file"] {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1.5px dashed var(--border);
+  background: rgba(248, 250, 252, 0.8);
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.file-upload-wrapper input[type="file"]:hover {
+  border-color: var(--primary);
+  background: rgba(219, 234, 254, 0.9);
+}
+
+.hint {
+  color: var(--text-light);
+  font-size: 13px;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.preview img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  transition: transform 0.2s ease;
+}
+
+.preview img:hover {
+  transform: scale(1.05);
+}
+
+.preview .file-item {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: rgba(248, 250, 252, 0.8);
+  font-size: 13px;
+  color: var(--text);
+  word-break: break-all;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px 24px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 500;
+  font-size: 16px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
+  letter-spacing: 0.3px;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.2);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.footer {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--text-lighter);
+  font-size: 13px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(241, 245, 249, 0.4);
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    padding: 16px 12px;
+    padding-top: 24px;
+  }
+
+  .card {
+    padding: 24px 20px;
+    border-radius: 12px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .preview {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+  }
+
+  .preview img,
+  .preview .file-item {
+    height: 80px;
+  }
+}
+
+/* 加载动画 */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn.loading::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  vertical-align: middle;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="card" role="main">
+    <div class="header">
+      <h1>明理建言直通车</h1>
+      <p>您的每一个建议，都是我们前进的动力</p>
+    </div>
+
+    <form id="form" method="post" action="/submit" enctype="multipart/form-data" novalidate>
+      <div class="form-group">
+        <label for="name">
+          姓名
+          <span class="optional">（选填）</span>
+        </label>
+        <input type="text" id="name" name="name" placeholder="请输入您的姓名">
+      </div>
+
+      <div class="form-group">
+        <label for="student_id">
+          学号
+          <span class="optional">（选填）</span>
+        </label>
+        <input type="text" id="student_id" name="student_id" placeholder="请输入您的学号">
+      </div>
+
+      <div class="form-group">
+        <label for="q1">
+          您的意见
+          <span style="color: #ef4444;">*</span>
+        </label>
+        <textarea id="q1" name="q1" placeholder="请详细描述您的建议或意见…" required></textarea>
+      </div>
+
+      <!-- 兼容字段（隐藏） -->
+      <input type="hidden" name="q2" id="q2" value="">
+      <input type="hidden" name="q3" id="q3" value="">
+
+      <div class="file-row">
+        <div class="form-group">
+          <label for="files">上传附件</label>
+          <div class="file-upload-wrapper">
+            <input id="files" name="files" type="file" accept=".jpg,.jpeg,.png,.gif,.webp,.doc,.docx,.pdf" multiple>
+          </div>
+          <div class="hint">
+            支持多文件上传，可上传图片、Word文档或PDF文件。单个文件建议小于 20MB，图片会自动显示预览。
+          </div>
+          <div id="preview" class="preview" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn" id="submitBtn">
+        提交反馈
+      </button>
+    </form>
+
+    <div class="footer">
+      感谢您为书院发展贡献力量
+    </div>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('form');
+const filesInput = document.getElementById('files');
+const preview = document.getElementById('preview');
+const submitBtn = document.getElementById('submitBtn');
+
+filesInput.addEventListener('change', () => {
+  preview.innerHTML = '';
+  Array.from(filesInput.files).forEach(file => {
+    if (file.type && file.type.startsWith('image/')) {
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      img.onload = () => URL.revokeObjectURL(img.src);
+      img.alt = file.name;
+      preview.appendChild(img);
+    } else {
+      const d = document.createElement('div');
+      d.className = 'file-item';
+      d.textContent = file.name;
+      preview.appendChild(d);
+    }
+  });
+});
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const q1 = document.getElementById('q1').value.trim();
+  if (!q1) {
+    alert('请填写意见后再提交。');
+    document.getElementById('q1').focus();
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+  submitBtn.textContent = '提交中';
+
+  const fd = new FormData(form);
+
+  fetch('/submit', {
+    method: 'POST',
+    body: fd,
+    credentials: 'same-origin'
+  })
+  .then(async resp => {
+    const text = await resp.text();
+
+    try {
+      const data = JSON.parse(text);
+      if (data && data.status === 'ok') {
+        window.location.href = '/thankyou';
+      } else if (data && data.status === 'error') {
+        alert('提交失败：' + (data.msg || '未知错误'));
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+        submitBtn.textContent = '提交反馈';
+      } else {
+        document.open();
+        document.write(text);
+        document.close();
+      }
+    } catch (err) {
+      document.open();
+      document.write(text);
+      document.close();
+    }
+  })
+  .catch(err => {
+    alert('网络错误，请检查网络连接后重试。');
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('loading');
+    submitBtn.textContent = '提交反馈';
+  });
+});
+</script>
+</body>
+</html>

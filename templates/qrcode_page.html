@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>扫码填写问卷</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#f5f6fa}
+.container{max-width:840px;margin:28px auto;padding:18px;text-align:center}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 8px 28px rgba(16,24,40,0.06)}
+h2{margin:0 0 8px}
+p{color:#6b7280;margin:6px 0 12px}
+.qr{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;align-items:center}
+.qr img{width:260px;height:260px;border:6px solid #fff;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
+.link-box{max-width:360px;text-align:left}
+.note{font-size:13px;color:#9ca3af;margin-top:12px}
+@media (max-width:480px){.qr img{width:200px;height:200px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <h2>扫码进入问卷</h2>
+    <p>请使用手机扫描下方二维码，或在手机浏览器打开：<strong>{{ url }}</strong></p>
+
+    <div class="qr" role="region" aria-label="二维码">
+      <!-- 你的后端 /qrcode 返回纯 PNG -->
+      <img src="/qrcode" alt="填写问卷二维码">
+      <div class="link-box">
+        <p style="margin:0 0 8px"><strong>如果扫码无法打开：</strong></p>
+        <p class="small">1. 请确认手机和电脑在同一局域网。</p>
+        <p class="small">2. 也可以直接在手机浏览器输入上方链接访问。</p>
+        <div class="note">如需打印，请使用浏览器打印功能（Ctrl+P）。</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

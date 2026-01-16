@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>提交记录 - 明理书院</title>
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #dbeafe;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --text-lighter: #94a3b8;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: white;
+  padding: 24px 20px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.header-actions a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-actions a:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.header-actions button {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.header-actions button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.header-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.batch-actions {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.batch-actions input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.batch-actions label {
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.batch-actions .delete-btn {
+  padding: 8px 16px;
+  background: #ef4444;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.batch-actions .delete-btn:hover:not(:disabled) {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.batch-actions .delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.record-card {
+  position: relative;
+}
+
+.record-checkbox {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary);
+  z-index: 10;
+}
+
+.record-card.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-light);
+}
+
+.empty-state svg {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.record-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+  transition: all 0.2s ease;
+}
+
+.record-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.record-header {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 20px;
+}
+
+.meta {
+  min-width: 180px;
+  flex-shrink: 0;
+}
+
+.meta-id {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.meta-id span {
+  color: var(--primary);
+  font-size: 20px;
+  margin-right: 4px;
+}
+
+.meta-info {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+.meta-info-item {
+  margin-bottom: 6px;
+}
+
+.meta-info strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.meta-time {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+  font-size: 12px;
+  color: var(--text-lighter);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.content-text {
+  white-space: pre-wrap;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.8;
+  word-wrap: break-word;
+}
+
+.files-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-light);
+}
+
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.file-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.file-item:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.file-item img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.file-item .file-name {
+  padding: 12px;
+  background: var(--bg);
+  font-size: 13px;
+  color: var(--text);
+  word-break: break-all;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.file-actions {
+  padding: 8px 12px;
+  background: var(--card);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  padding: 6px 14px;
+  background: var(--primary);
+  color: #ffffff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .header-actions a {
+    flex: 1;
+    text-align: center;
+  }
+
+  .record-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .meta {
+    min-width: 100%;
+  }
+
+  .files-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+  }
+
+  .file-item img {
+    height: 100px;
+  }
+
+  .file-item .file-name {
+    min-height: 60px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 12px;
+  }
+
+  .record-card {
+    padding: 20px 16px;
+  }
+
+  .files-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-content">
+    <h1>问卷管理</h1>
+    <div class="header-actions">
+      <a href="/download_all?type=all">导出全部</a>
+      <a href="/download_all?type=image">导出图片</a>
+      <a href="/download_all?type=word">导出文档</a>
+      <a href="/logout">退出登录</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  {% if records|length > 0 %}
+  <div class="batch-actions">
+    <label>
+      <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+      <span>全选</span>
+    </label>
+    <button class="delete-btn" id="deleteBtn" onclick="deleteSelected()" disabled>
+      删除选中 (<span id="selectedCount">0</span>)
+    </button>
+  </div>
+  {% endif %}
+
+  {% if records|length == 0 %}
+  <div class="empty-state">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/>
+    </svg>
+    <p style="font-size: 16px; margin-top: 8px;">暂无记录</p>
+    <p style="font-size: 14px; margin-top: 4px; color: var(--text-lighter);">当有新的提交时，记录将显示在这里</p>
+  </div>
+  {% endif %}
+
+  {% for r in records %}
+  <div class="record-card" role="article" aria-labelledby="rec-{{ r.id }}" data-record-id="{{ r.id }}">
+    <input type="checkbox" class="record-checkbox" value="{{ r.id }}" onchange="updateDeleteButton()">
+    <div class="record-header">
+      <div class="meta">
+        <div class="meta-id">
+          <span>#</span>{{ r.id }}
+        </div>
+        {% if r.name or r.student_id %}
+        <div class="meta-info">
+          {% if r.name %}
+          <div class="meta-info-item">
+            <strong>姓名：</strong>{{ r.name }}
+          </div>
+          {% endif %}
+          {% if r.student_id %}
+          <div class="meta-info-item">
+            <strong>学号：</strong>{{ r.student_id }}
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+        <div class="meta-time">{{ r.submit_time }}</div>
+      </div>
+
+      <div class="content">
+        <div class="content-text">
+          {% if r.q1 %}{{ r.q1 }}{% endif %}
+          {% if not r.q1 and r.q2 %}{{ r.q2 }}{% endif %}
+          {% if not r.q1 and not r.q2 and r.q3 %}{{ r.q3 }}{% endif %}
+        </div>
+
+        {% if r.files and r.files|length > 0 %}
+        <div class="files-section" aria-label="附件">
+          <div style="font-size: 13px; font-weight: 500; color: var(--text-light); margin-bottom: 12px;">
+            附件 ({{ r.files|length }})
+          </div>
+          <div class="files-grid">
+            {% for f in r.files %}
+            <div class="file-item">
+              {% if f.type == "image" %}
+                <a href="/file/{{ f.id }}" target="_blank" rel="noopener">
+                  <img src="/file/{{ f.id }}" alt="{{ f.name }}">
+                </a>
+              {% else %}
+                <div class="file-name">{{ f.name }}</div>
+              {% endif %}
+              <div class="file-actions">
+                <a class="btn" href="/file/{{ f.id }}" download="{{ f.name }}">下载</a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+function toggleSelectAll() {
+  const selectAll = document.getElementById('selectAll');
+  const checkboxes = document.querySelectorAll('.record-checkbox');
+  const recordCards = document.querySelectorAll('.record-card');
+  
+  checkboxes.forEach((checkbox, index) => {
+    checkbox.checked = selectAll.checked;
+    if (selectAll.checked) {
+      recordCards[index].classList.add('selected');
+    } else {
+      recordCards[index].classList.remove('selected');
+    }
+  });
+  
+  updateDeleteButton();
+}
+
+function updateDeleteButton() {
+  const checkboxes = document.querySelectorAll('.record-checkbox:checked');
+  const deleteBtn = document.getElementById('deleteBtn');
+  const selectedCount = document.getElementById('selectedCount');
+  const selectAll = document.getElementById('selectAll');
+  const allCheckboxes = document.querySelectorAll('.record-checkbox');
+  const recordCards = document.querySelectorAll('.record-card');
+  
+  const count = checkboxes.length;
+  selectedCount.textContent = count;
+  deleteBtn.disabled = count === 0;
+  
+  // 更新全选状态
+  if (allCheckboxes.length > 0) {
+    selectAll.checked = count === allCheckboxes.length;
+    selectAll.indeterminate = count > 0 && count < allCheckboxes.length;
+  }
+  
+  // 更新卡片选中样式
+  checkboxes.forEach(checkbox => {
+    const card = checkbox.closest('.record-card');
+    if (checkbox.checked) {
+      card.classList.add('selected');
+    } else {
+      card.classList.remove('selected');
+    }
+  });
+  
+  // 移除未选中卡片的样式
+  document.querySelectorAll('.record-checkbox').forEach(checkbox => {
+    if (!checkbox.checked) {
+      checkbox.closest('.record-card').classList.remove('selected');
+    }
+  });
+}
+
+function deleteSelected() {
+  const checkboxes = document.querySelectorAll('.record-checkbox:checked');
+  const ids = Array.from(checkboxes).map(cb => cb.value);
+  
+  if (ids.length === 0) {
+    alert('请至少选择一条记录');
+    return;
+  }
+  
+  const confirmMsg = ids.length === 1 
+    ? `确定要删除选中的 1 条记录吗？此操作不可恢复！`
+    : `确定要删除选中的 ${ids.length} 条记录吗？此操作不可恢复！`;
+  
+  if (!confirm(confirmMsg)) {
+    return;
+  }
+  
+  const deleteBtn = document.getElementById('deleteBtn');
+  deleteBtn.disabled = true;
+  deleteBtn.textContent = '删除中...';
+  
+  fetch('/delete_records', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ids: ids })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'ok') {
+      // 删除成功，重新加载页面
+      window.location.reload();
+    } else {
+      alert('删除失败：' + (data.msg || '未知错误'));
+      deleteBtn.disabled = false;
+      deleteBtn.innerHTML = '删除选中 (<span id="selectedCount">' + ids.length + '</span>)';
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('删除失败：网络错误');
+    deleteBtn.disabled = false;
+    deleteBtn.innerHTML = '删除选中 (<span id="selectedCount">' + ids.length + '</span>)';
+  });
+}
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+  updateDeleteButton();
+});
+</script>
+</body>
+</html>
