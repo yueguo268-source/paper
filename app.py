@@ -128,6 +128,17 @@ def init_db():
         conn.commit()
 
 
+# 自动初始化数据库（确保无论用什么方式启动都能初始化）
+# 放在 init_db() 函数定义之后，这样无论用 python app.py 还是 Gunicorn 都会执行
+try:
+    init_db()
+    if DEBUG_MODE:
+        print("[DEBUG] 数据库初始化成功")
+except Exception as e:
+    print(f"警告：数据库初始化失败: {e}")
+    print("请检查数据库文件权限和磁盘空间")
+
+
 def get_server_url():
     if SERVER_URL:
         return SERVER_URL
